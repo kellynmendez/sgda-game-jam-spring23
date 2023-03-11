@@ -10,5 +10,6 @@ public class TestMaze : MonoBehaviour
         MazeGenerator mazeGen = FindObjectOfType<MazeGenerator>();
         MazeCell [,] maze = mazeGen.GenerateMazeArray();
         mazeGen.PrintMaze(maze);
+        mazeGen.InstantiateMaze(maze);
     }
 }

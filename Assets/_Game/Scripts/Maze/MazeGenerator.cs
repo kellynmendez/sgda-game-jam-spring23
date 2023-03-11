@@ -6,10 +6,13 @@ public class MazeGenerator : MonoBehaviour
 {
     [SerializeField] int numRows = 10;
     [SerializeField] int numCols = 10;
-    [SerializeField] int wallLength = 10;
-    [SerializeField] int wallDepth = 3;
+    [SerializeField] int wallLength = 15;
+    [SerializeField] int wallDepth = 1;
     [SerializeField] GameObject wallPrefab;
 
+    /**
+     * Generates a maze stored in a 2D array of cells
+     */
     public MazeCell[,] GenerateMazeArray()
     {
         int numCells = numRows * numCols;
@@ -289,9 +292,58 @@ public class MazeGenerator : MonoBehaviour
 
     public void InstantiateMaze(MazeCell[,] maze)
     {
+        // Instantiating top wall of maze
+        for (int i = 0; i < numRows; i++)
+        {
+            Instantiate(wallPrefab,
+                        new Vector3((-1 * (wallLength + 1)) + wallDepth,
+                                    0,
+                                    (i * (wallLength + 1)) + (wallLength / 2)),
+                        Quaternion.identity);
+        }
 
+        // Instantiating right wall of maze
+        for (int i = 0; i < numCols; i++)
+        {
+            // Instantiating left wall
+            Instantiate(wallPrefab,
+                        new Vector3(i * (wallLength + 1) - (wallLength / 2),
+                                    0,
+                                    (numCols * (wallLength + 1)) - wallDepth),
+                        Quaternion.identity * Quaternion.AngleAxis(90, Vector3.up));
+        }
+
+        // Insantiating the maze itself
+        for (int x = 0; x < numRows; x++)
+        {
+            for (int z = 0; z < numCols; z++)
+            {
+                MazeCell myCell = maze[x, z];
+                if (myCell.downWall == true)
+                {
+                    // Instantiating bottom wall
+                    Instantiate(wallPrefab, 
+                                new Vector3((x * (wallLength + 1)) + wallDepth, 
+                                            0, 
+                                            (z * (wallLength + 1)) + (wallLength / 2)), 
+                                Quaternion.identity);
+                }
+                if (myCell.leftWall == true)
+                {
+                    // Instantiating left wall
+                    Instantiate(wallPrefab,
+                                new Vector3(x * (wallLength + 1) - (wallLength / 2), 
+                                            0, 
+                                            (z * (wallLength + 1)) - wallDepth),
+                                Quaternion.identity * Quaternion.AngleAxis(90, Vector3.up));
+                }
+            }
+        }
     }
 
+    /*
+     * Prints the maze array (for debugging purposes)
+     */
     public void PrintMaze(MazeCell[,] maze)
     {
         string maze_str = "";
@@ -327,16 +379,16 @@ public class MazeGenerator : MonoBehaviour
 /*
 
  _ _ _ _ _ _ _ _ _ _
-  |_ _ _ _ _    | | |
-|  _      |  _|_    |
-|   |_|_|_ _|_ _ _|_|
-| |_ _|_    | | |_  |
-|   |  _|_|_   _    |
-|_|_ _  |  _|_  |_|_|
-|  _ _ _| |_ _ _  | |
-|_ _ _    |  _|   | |
-|  _ _|_|      _|   |
-|_ _ _ _ _|_|_ _|_| |
+ _     _|_  | |  _  |
+|_ _|_  |    _ _|_ _|
+| | |_    |_|   |_  |
+| |  _ _|_ _  |_ _ _|
+| |_  |_   _| |  _  |
+| |  _|  _ _  |_  | |
+|_    | |  _|_| | |_|
+|  _|_|   | |  _| | |
+|  _|_  |_ _   _|   |
+|_ _ _|_|_ _ _ _ _| |
 
 
 */
