@@ -7,6 +7,11 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: T_shelves
+    second: {fileID: 2100000, guid: a7c28613322a433438e66308696b4844, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: checkers
     second: {fileID: 2100000, guid: a7c28613322a433438e66308696b4844, type: 2}
   materials:
